@@ -29,6 +29,10 @@
     <!-- gRPC 模式：Grpc.AspNetCore 框架 -->
     <PackageReference Include="Grpc.AspNetCore" Version="2.*" />
     <!--#endif-->
+    <!--#if (IsAdminIntegrated)-->
+    <!-- 集成管理后台：Blazor Server 组件 + MudBlazor -->
+    <PackageReference Include="MudBlazor" Version="8.*" />
+    <!--#endif-->
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +45,9 @@
   <ItemGroup>
     <ProjectReference Include="..\TC.Micro.Sample.Application\TC.Micro.Sample.Application.csproj" />
     <ProjectReference Include="..\TC.Micro.Sample.Infrastructure\TC.Micro.Sample.Infrastructure.csproj" />
+    <!--#if (IsAdminIntegrated)-->
+    <ProjectReference Include="..\TC.Micro.Sample.Admin\TC.Micro.Sample.Admin.csproj" />
+    <!--#endif-->
   </ItemGroup>
 
 </Project>

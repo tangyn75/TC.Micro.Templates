@@ -9,17 +9,20 @@
 
 ### 1.1 新建业务服务
 
-使用 `tcmicro-webapi` 模板一键生成项目：
+使用 `tc-micro-webapi` 模板一键生成项目：
 
 ```bash
 # 基础 HTTP 服务（三层结构）
-dotnet new tcmicro-webapi -n TC.Micro.OrderService
+dotnet new tc-micro-webapi -n TC.Micro.OrderService
 
 # 包含内置管理后台（可选 Server/WASM/Auto 模式）
-dotnet new tcmicro-webapi -n TC.Micro.OrderService --IncludeAdminUi --AdminHostingMode server
+dotnet new tc-micro-webapi -n TC.Micro.OrderService --IncludeAdminUi --AdminHostingModel server
+
+# 集成模式：管理后台共用 Api 端口（仅支持 Server 托管）
+dotnet new tc-micro-webapi -n TC.Micro.OrderService --IncludeAdminUi --AdminDeploymentMode integrated
 
 # 混合模式（HTTP + gRPC）
-dotnet new tcmicro-webapi -n TC.Micro.OrderService --ApiType httpAndGrpc
+dotnet new tc-micro-webapi -n TC.Micro.OrderService --ApiType httpAndGrpc
 ```
 
 生成的项目结构：

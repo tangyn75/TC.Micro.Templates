@@ -1,7 +1,10 @@
+<!--#if (IsAdminIntegrated)-->
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+<!--#endif-->
 <!--#if (IsAdminWasm)-->
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 <!--#endif-->
-<!--#if (IsAdminServer || IsAdminAuto)-->
+<!--#if ((IsAdminServer || IsAdminAuto) && !IsAdminIntegrated)-->
 <Project Sdk="Microsoft.NET.Sdk.Web">
 <!--#endif-->
 
@@ -16,7 +19,7 @@
   <ItemGroup>
     <!-- MudBlazor 8.x -->
     <PackageReference Include="MudBlazor" Version="8.*" />
-<!--#if (IsAdminServer || IsAdminAuto)-->
+<!--#if ((IsAdminServer || IsAdminAuto) && !IsAdminIntegrated)-->
     <PackageReference Include="TC.Micro.Logging" Version="1.*" />
     <PackageReference Include="TC.Micro.HealthChecks" Version="1.*" />
 <!--#endif-->

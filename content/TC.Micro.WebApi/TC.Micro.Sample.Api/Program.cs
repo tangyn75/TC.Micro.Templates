@@ -64,6 +64,27 @@ builder.Services.AddGrpc();
 builder.Services.AddScoped<TC.Micro.Sample.Application.Services.ISampleService,
                             TC.Micro.Sample.Application.Services.SampleService>();
 
+#if (IsAdminIntegrated)
+// ── 16. 集成管理后台（Blazor Server，共用端口）────────────────────────────
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.VisibleStateDuration = 4000;
+});
+builder.Services.AddScoped<TC.Micro.Sample.Admin.Services.IThemeService,
+                            TC.Micro.Sample.Admin.Services.ThemeService>();
+builder.Services.AddScoped<TC.Micro.Sample.Admin.Services.INavMenuService,
+                            TC.Micro.Sample.Admin.Services.NavMenuService>();
+builder.Services.AddHttpClient("SampleApi", client =>
+{
+    client.BaseAddress = new Uri(
+        builder.Configuration["SampleApiBaseUrl"] ?? "http://localhost:5400");
+});
+#endif
+
 // ──────────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 // ──────────────────────────────────────────────────────────────────────────
@@ -100,6 +121,14 @@ app.MapControllers();
 #if (IsGrpc)
 // gRPC 服务路由
 app.MapGrpcService<SampleGrpcService>();
+#endif
+
+#if (IsAdminIntegrated)
+// 集成管理后台 Blazor UI
+app.UseStaticFiles();
+app.UseAntiforgery();
+app.MapRazorComponents<TC.Micro.Sample.Admin.Components.App>()
+    .AddInteractiveServerRenderMode();
 #endif
 
 app.Run();

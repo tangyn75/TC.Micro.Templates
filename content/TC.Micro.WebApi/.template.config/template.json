@@ -4,7 +4,7 @@
   "classifications": ["Web", "API", "Microservice", "TC.Micro"],
   "identity": "TCMicro.WebApi.CSharp.1.1",
   "name": "TC.Micro WebAPI Service",
-  "shortName": "tcmicro-webapi",
+  "shortName": "tc-micro-webapi",
   "description": "业务微服务模板（三/四项目结构：Api / Application / Infrastructure [/ Admin]），支持 HTTP、gRPC 或混合模式，可选内置管理 UI。",
   "sourceName": "TC.Micro.Sample",
   "preferNameDirectory": false,
@@ -60,6 +60,24 @@
       ],
       "defaultValue": "server",
       "description": "Admin 托管模式（仅 --IncludeAdminUi 时生效）：server | wasm | auto"
+    },
+    "AdminDeploymentMode": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "standalone", "description": "独立项目，独立端口（默认）" },
+        { "choice": "integrated", "description": "集成到 Api 项目，共用 ServicePort（仅支持 Server 托管模式）" }
+      ],
+      "defaultValue": "standalone",
+      "description": "管理后台部署模式（仅 --IncludeAdminUi 时生效）：standalone | integrated"
+    },
+    "IsAdminStandalone": {
+      "type": "computed",
+      "value": "(IncludeAdminUi && AdminDeploymentMode == \"standalone\")"
+    },
+    "IsAdminIntegrated": {
+      "type": "computed",
+      "value": "(IncludeAdminUi && AdminDeploymentMode == \"integrated\")"
     },
     "IsAdminServer": {
       "type": "computed",
@@ -129,6 +147,21 @@
           ],
           "rename": {
             "TC.Micro.Sample.Admin/Components/App.Server.razor": "TC.Micro.Sample.Admin/Components/App.razor"
+          }
+        },
+        {
+          "condition": "(IsAdminIntegrated)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/wwwroot/index.html",
+            "TC.Micro.Sample.Admin/Components/App.Server.razor",
+            "TC.Micro.Sample.Admin/Components/App.Wasm.razor",
+            "TC.Micro.Sample.Admin/Components/App.Auto.razor",
+            "TC.Micro.Sample.Admin/Program.cs",
+            "TC.Micro.Sample.Admin/appsettings.json",
+            "TC.Micro.Sample.Admin/appsettings.Development.json"
+          ],
+          "rename": {
+            "TC.Micro.Sample.Admin/Components/App.Integrated.razor": "TC.Micro.Sample.Admin/Components/App.razor"
           }
         },
         {

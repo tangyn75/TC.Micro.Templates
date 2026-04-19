@@ -4,7 +4,7 @@
   "classifications": ["Web", "Blazor", "Admin", "UI", "TC.Micro"],
   "identity": "TCMicro.BlazorAdmin.CSharp.1.1",
   "name": "TC.Micro Blazor Admin UI",
-  "shortName": "tcmicro-blazoradmin",
+  "shortName": "tc-micro-blazoradmin",
   "description": "独立管理后台脚手架，支持 Blazor Server / WebAssembly / Auto 三种托管模式。遵循 MudBlazor 企业级设计规范：明/暗主题、多语言 i18n、响应式布局、JWT 认证。",
   "sourceName": "TC.Micro.SampleAdmin",
   "preferNameDirectory": false,

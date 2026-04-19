@@ -2,15 +2,15 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "TC.Micro Team",
   "classifications": ["Web", "Blazor", "Admin", "UI", "TC.Micro"],
-  "identity": "TCMicro.BlazorAdmin.CSharp.1.0",
+  "identity": "TCMicro.BlazorAdmin.CSharp.1.1",
   "name": "TC.Micro Blazor Admin UI",
   "shortName": "tcmicro-blazoradmin",
-  "description": "独立 Blazor Server 管理后台脚手架，遵循 MudBlazor 企业级设计规范：明/暗主题、多语言 i18n、响应式布局、JWT 认证。",
+  "description": "独立管理后台脚手架，支持 Blazor Server / WebAssembly / Auto 三种托管模式。遵循 MudBlazor 企业级设计规范：明/暗主题、多语言 i18n、响应式布局、JWT 认证。",
   "sourceName": "TC.Micro.SampleAdmin",
   "preferNameDirectory": false,
   "tags": {
     "language": "C#",
-    "type": "project"
+    "type": "solution"
   },
   "symbols": {
     "AdminPort": {
@@ -31,6 +31,29 @@
       "defaultValue": "http://localhost:5202/api",
       "description": "Identity 管理 REST API 地址（TC.Micro.Identity.Admin 的 5202 端口）"
     },
+    "HostingModel": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "server", "description": "Blazor Server（ASP.NET Core 托管，SignalR 通信）" },
+        { "choice": "wasm",   "description": "Blazor WebAssembly（独立 SPA，浏览器端运行）" },
+        { "choice": "auto",   "description": "Blazor Auto（SSR 首屏 + WASM 交互，双项目结构）" }
+      ],
+      "defaultValue": "server",
+      "description": "Blazor 托管模式：server | wasm | auto"
+    },
+    "IsServer": {
+      "type": "computed",
+      "value": "(HostingModel == \"server\")"
+    },
+    "IsWasm": {
+      "type": "computed",
+      "value": "(HostingModel == \"wasm\")"
+    },
+    "IsAuto": {
+      "type": "computed",
+      "value": "(HostingModel == \"auto\")"
+    },
     "Framework": {
       "type": "parameter",
       "description": "目标框架",
@@ -42,10 +65,110 @@
       "defaultValue": "net8.0"
     }
   },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!IsAuto)",
+          "exclude": [
+            "TC.Micro.SampleAdmin.Client/**"
+          ]
+        },
+        {
+          "condition": "(IsAuto)",
+          "exclude": [
+            "TC.Micro.SampleAdmin/Layouts/**",
+            "TC.Micro.SampleAdmin/Pages/**",
+            "TC.Micro.SampleAdmin/Shared/**",
+            "TC.Micro.SampleAdmin/Services/AuthService.cs",
+            "TC.Micro.SampleAdmin/Services/LayoutService.cs",
+            "TC.Micro.SampleAdmin/wwwroot/index.html"
+          ]
+        },
+        {
+          "condition": "(IsServer)",
+          "exclude": [
+            "TC.Micro.SampleAdmin/wwwroot/index.html",
+            "TC.Micro.SampleAdmin/Services/WasmAuthStateProvider.cs",
+            "TC.Micro.SampleAdmin/Services/AuthMessageHandler.cs",
+            "TC.Micro.SampleAdmin/Components/App.Wasm.razor",
+            "TC.Micro.SampleAdmin/Components/App.Auto.razor"
+          ],
+          "rename": {
+            "Components/App.Server.razor": "Components/App.razor"
+          }
+        },
+        {
+          "condition": "(IsWasm)",
+          "exclude": [
+            "TC.Micro.SampleAdmin/Components/App.Server.razor",
+            "TC.Micro.SampleAdmin/Components/App.Auto.razor"
+          ],
+          "rename": {
+            "Components/App.Wasm.razor": "Components/App.razor"
+          }
+        },
+        {
+          "condition": "(IsAuto)",
+          "exclude": [
+            "TC.Micro.SampleAdmin/Components/App.Server.razor",
+            "TC.Micro.SampleAdmin/Components/App.Wasm.razor"
+          ],
+          "rename": {
+            "Components/App.Auto.razor": "Components/App.razor"
+          }
+        }
+      ]
+    }
+  ],
+  "specialCustomOperations": {
+    "*.sln": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "actionableIf":     ["#if"],
+            "actionableElse":   ["#else"],
+            "actionableElseif": ["#elseif"],
+            "endif":            ["#endif"],
+            "trim":             true,
+            "wholeLine":        true,
+            "evaluator":        "C++"
+          }
+        }
+      ]
+    },
+    "*.csproj": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "actionableIf":     ["<!--#if"],
+            "actionableElse":   ["<!--#else"],
+            "actionableElseif": ["<!--#elseif"],
+            "endif":            ["<!--#endif"],
+            "trim":             true,
+            "wholeLine":        true,
+            "evaluator":        "C++"
+          }
+        }
+      ]
+    }
+  },
   "guids": [
-    "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"
+    "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA",
+    "BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB"
   ],
   "primaryOutputs": [
-    { "path": "TC.Micro.SampleAdmin/TC.Micro.SampleAdmin.csproj" }
+    { "path": "TC.Micro.SampleAdmin.sln" }
+  ],
+  "postActions": [
+    {
+      "condition": "(OS != \"Windows_NT\")",
+      "description": "使模板启动脚本可执行",
+      "manualInstructions": [{ "text": "运行 chmod +x *.sh" }],
+      "actionId": "cb9a6cf3-4f5c-4860-b9d2-03a574959774",
+      "continueOnError": true
+    }
   ]
 }

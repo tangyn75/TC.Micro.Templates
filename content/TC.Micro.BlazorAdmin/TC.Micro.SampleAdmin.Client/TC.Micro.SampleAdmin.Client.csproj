@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TC.Micro.SampleAdmin.Client</RootNamespace>
+    <AssemblyName>TC.Micro.SampleAdmin.Client</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MudBlazor 7.x -->
+    <PackageReference Include="MudBlazor" Version="7.*" />
+    <PackageReference Include="MudBlazor.Extensions" Version="7.*" />
+
+    <!-- 多语言国际化 -->
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.*" />
+
+    <!-- HTTP 客户端 -->
+    <PackageReference Include="Refit" Version="7.*" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.*" />
+
+    <!-- 表单验证 -->
+    <PackageReference Include="FluentValidation" Version="11.*" />
+
+    <!-- Blazor WASM 运行时 -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*" />
+  </ItemGroup>
+
+</Project>

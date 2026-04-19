@@ -1,0 +1,56 @@
+@inject NavigationManager Nav
+
+@if (_items.Count > 0)
+{
+    <MudBreadcrumbs Items="@_items" Class="@Class" />
+}
+
+@code {
+    [Parameter] public string? Class { get; set; }
+
+    private List<BreadcrumbItem> _items = new();
+
+    protected override void OnParametersSet()
+    {
+        _items = BuildBreadcrumbs(Nav.Uri);
+    }
+
+    private List<BreadcrumbItem> BuildBreadcrumbs(string uri)
+    {
+        var path = new Uri(uri).AbsolutePath.TrimStart('/');
+        if (string.IsNullOrEmpty(path))
+            return new List<BreadcrumbItem> { new("首页", href: "/", icon: Icons.Material.Outlined.Home) };
+
+        var crumbs = new List<BreadcrumbItem>
+        {
+            new("首页", href: "/", icon: Icons.Material.Outlined.Home)
+        };
+
+        // 路径段映射（按需扩展）
+        var segmentLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["gateway"]  = "Gateway",
+            ["identity"] = "Identity",
+            ["services"] = "服务列表",
+            ["routes"]   = "路由配置",
+            ["plugins"]  = "插件管理",
+            ["users"]    = "用户管理",
+            ["roles"]    = "角色权限",
+            ["tenants"]  = "租户管理",
+            ["policies"] = "ABAC 策略",
+            ["dashboard"] = "仪表盘"
+        };
+
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var hrefBuilder = "";
+        for (int i = 0; i < segments.Length; i++)
+        {
+            hrefBuilder += "/" + segments[i];
+            var label = segmentLabels.TryGetValue(segments[i], out var l) ? l : segments[i];
+            var isLast = i == segments.Length - 1;
+            crumbs.Add(new(label, href: isLast ? null : hrefBuilder, disabled: isLast));
+        }
+
+        return crumbs;
+    }
+}

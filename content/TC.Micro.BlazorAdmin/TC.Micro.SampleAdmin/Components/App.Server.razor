@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TC.Micro Admin</title>
 
-    <!-- MudBlazor 样式 -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-    <!-- 应用自定义样式 -->
     <link href="css/app.css" rel="stylesheet" />
 
     <base href="/" />
-    <HeadOutlet />
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 <body>
     <Routes @rendermode="InteractiveServer" />
 
-    <!-- MudBlazor JS -->
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="_framework/blazor.server.js"></script>
 </body>

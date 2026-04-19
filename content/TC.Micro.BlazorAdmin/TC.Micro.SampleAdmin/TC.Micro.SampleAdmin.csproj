@@ -1,4 +1,9 @@
+<!--#if (IsWasm)-->
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<!--#endif-->
+<!--#if (IsServer || IsAuto)-->
 <Project Sdk="Microsoft.NET.Sdk.Web">
+<!--#endif-->
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +11,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TC.Micro.SampleAdmin</RootNamespace>
     <AssemblyName>TC.Micro.SampleAdmin</AssemblyName>
+<!--#if (IsServer)-->
+    <UserSecretsId>AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA</UserSecretsId>
+<!--#endif-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,14 +31,27 @@
     <!-- 表单验证 -->
     <PackageReference Include="FluentValidation" Version="11.*" />
 
+<!--#if (IsServer || IsAuto)-->
     <!-- JWT 认证 -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.*" />
 
     <!-- 结构化日志 -->
     <PackageReference Include="Serilog.AspNetCore" Version="8.*" />
+<!--#endif-->
+<!--#if (IsWasm)-->
+    <!-- Blazor WASM 运行时 -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*" />
 
-    <!-- 状态管理（可选，按需启用） -->
-    <!-- <PackageReference Include="Fluxor.Blazor.Web" Version="6.*" /> -->
+    <!-- 结构化日志（WASM 有限支持） -->
+    <PackageReference Include="Serilog" Version="4.*" />
+    <PackageReference Include="Serilog.Sinks.BrowserConsole" Version="2.*" />
+<!--#endif-->
   </ItemGroup>
+
+<!--#if (IsAuto)-->
+  <ItemGroup>
+    <ProjectReference Include="..\TC.Micro.SampleAdmin.Client\TC.Micro.SampleAdmin.Client.csproj" />
+  </ItemGroup>
+<!--#endif-->
 
 </Project>

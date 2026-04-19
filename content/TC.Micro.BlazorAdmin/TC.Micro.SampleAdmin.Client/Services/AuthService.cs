@@ -1,27 +1,14 @@
-using TC.Micro.SampleAdmin.Infrastructure.ApiClients;
-using TC.Micro.SampleAdmin.Models;
+using TC.Micro.SampleAdmin.Client.Infrastructure.ApiClients;
+using TC.Micro.SampleAdmin.Client.Models;
 
-namespace TC.Micro.SampleAdmin.Services;
+namespace TC.Micro.SampleAdmin.Client.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IIdentityManagementApi _identityApi;
     private readonly ILogger<AuthService> _logger;
-#if (IsServer || IsAuto)
-    private string? _token;
-#endif
-#if (IsWasm)
     private readonly WasmAuthStateProvider _authStateProvider;
-#endif
 
-#if (IsServer || IsAuto)
-    public AuthService(IIdentityManagementApi identityApi, ILogger<AuthService> logger)
-    {
-        _identityApi = identityApi;
-        _logger      = logger;
-    }
-#endif
-#if (IsWasm)
     public AuthService(
         IIdentityManagementApi identityApi,
         ILogger<AuthService> logger,
@@ -31,7 +18,6 @@ public class AuthService : IAuthService
         _logger            = logger;
         _authStateProvider = authStateProvider;
     }
-#endif
 
     public async Task<bool> LoginAsync(string username, string password, CancellationToken ct = default)
     {
@@ -45,12 +31,7 @@ public class AuthService : IAuthService
 
             if (response?.AccessToken is null) return false;
 
-#if (IsServer || IsAuto)
-            _token = response.AccessToken;
-#endif
-#if (IsWasm)
             _authStateProvider.SetToken(response.AccessToken);
-#endif
             return true;
         }
         catch (Exception ex)
@@ -60,24 +41,12 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task LogoutAsync(CancellationToken ct = default)
+    public Task LogoutAsync(CancellationToken ct = default)
     {
-#if (IsServer || IsAuto)
-        _token = null;
-#endif
-#if (IsWasm)
         _authStateProvider.SetToken(null);
-#endif
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public Task<string?> GetTokenAsync(CancellationToken ct = default)
-    {
-#if (IsServer || IsAuto)
-        return Task.FromResult(_token);
-#endif
-#if (IsWasm)
-        return Task.FromResult(_authStateProvider.GetToken());
-#endif
-    }
+        => Task.FromResult(_authStateProvider.GetToken());
 }

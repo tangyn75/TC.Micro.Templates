@@ -1,0 +1,111 @@
+@page "/login"
+@layout AuthLayout
+@inject IAuthService AuthService
+@inject NavigationManager Nav
+
+<PageTitle>登录 - TC.Micro Admin</PageTitle>
+
+<MudCard Elevation="8" Class="pa-2">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Class="mb-2">
+                <MudIcon Icon="@Icons.Material.Filled.CloudDone"
+                         Size="Size.Large"
+                         Color="Color.Primary"
+                         Class="mr-2" />
+                <MudText Typo="Typo.h5" Style="font-weight:600">TC.Micro Admin</MudText>
+            </MudStack>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">请输入管理员账号登录</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <MudForm @ref="_form" @bind-IsValid="_formValid">
+            <MudTextField Label="用户名"
+                          @bind-Value="_username"
+                          Required="true"
+                          RequiredError="用户名不能为空"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Person"
+                          Class="mb-4" />
+
+            <MudTextField Label="密码"
+                          @bind-Value="_password"
+                          InputType="@_passwordInputType"
+                          Required="true"
+                          RequiredError="密码不能为空"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@_passwordIcon"
+                          OnAdornmentClick="@TogglePasswordVisibility"
+                          Class="mb-4" />
+
+            @if (_errorMessage is not null)
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4">@_errorMessage</MudAlert>
+            }
+        </MudForm>
+    </MudCardContent>
+
+    <MudCardActions Class="pa-4 pt-0">
+        <MudButton FullWidth="true"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Size="Size.Large"
+                   Disabled="@(!_formValid || _loading)"
+                   OnClick="@HandleLogin">
+            @if (_loading)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                <span>登录中...</span>
+            }
+            else
+            {
+                <span>登 录</span>
+            }
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    private MudForm _form = default!;
+    private bool    _formValid;
+    private bool    _loading;
+    private string? _errorMessage;
+
+    private string _username = string.Empty;
+    private string _password = string.Empty;
+
+    private bool       _showPassword       = false;
+    private InputType  _passwordInputType  => _showPassword ? InputType.Text : InputType.Password;
+    private string     _passwordIcon       => _showPassword
+        ? Icons.Material.Filled.VisibilityOff
+        : Icons.Material.Filled.Visibility;
+
+    private void TogglePasswordVisibility() => _showPassword = !_showPassword;
+
+    private async Task HandleLogin()
+    {
+        await _form.Validate();
+        if (!_formValid) return;
+
+        _loading = true;
+        _errorMessage = null;
+
+        try
+        {
+            var success = await AuthService.LoginAsync(_username, _password);
+            if (success)
+                Nav.NavigateTo("/");
+            else
+                _errorMessage = "用户名或密码错误，请重试";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"登录失败：{ex.Message}";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}

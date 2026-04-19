@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "TC.Micro Team",
+  "classifications": ["Web", "API", "Microservice", "TC.Micro"],
+  "identity": "TCMicro.WebApi.CSharp.1.1",
+  "name": "TC.Micro WebAPI Service",
+  "shortName": "tcmicro-webapi",
+  "description": "业务微服务模板（三/四项目结构：Api / Application / Infrastructure [/ Admin]），支持 HTTP、gRPC 或混合模式，可选内置管理 UI。",
+  "sourceName": "TC.Micro.Sample",
+  "preferNameDirectory": false,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "symbols": {
+    "ServicePort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "defaultValue": "5400",
+      "description": "业务 HTTP/gRPC 监听端口（5400–5599 业务服务范围）"
+    },
+    "AdminPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "defaultValue": "5401",
+      "description": "Admin 管理端口（仅 --include-admin-ui 时生效，默认 ServicePort + 1）"
+    },
+    "ApiType": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "http",        "description": "RESTful HTTP API（默认，对外暴露 REST 端点）" },
+        { "choice": "grpc",        "description": "纯 gRPC 服务（仅服务间内部调用）" },
+        { "choice": "httpAndGrpc", "description": "HTTP + gRPC 混合（同时暴露 REST 和 gRPC）" }
+      ],
+      "defaultValue": "http",
+      "description": "API 协议类型：http | grpc | httpAndGrpc"
+    },
+    "IsHttp": {
+      "type": "computed",
+      "value": "(ApiType == \"http\") || (ApiType == \"httpAndGrpc\")"
+    },
+    "IsGrpc": {
+      "type": "computed",
+      "value": "(ApiType == \"grpc\") || (ApiType == \"httpAndGrpc\")"
+    },
+    "IncludeAdminUi": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "是否生成内置管理 UI 项目（第 4 个项目：管理 REST API + Blazor Server UI，独立端口，使用 --IncludeAdminUi 启用）"
+    },
+    "Framework": {
+      "type": "parameter",
+      "description": "目标框架",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "net8.0", "description": ".NET 8 (LTS)" },
+        { "choice": "net9.0", "description": ".NET 9" }
+      ],
+      "defaultValue": "net8.0"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!IsGrpc)",
+          "exclude": [
+            "TC.Micro.Sample.Api/Protos/**",
+            "TC.Micro.Sample.Api/GrpcServices/**"
+          ]
+        },
+        {
+          "condition": "(!IsHttp)",
+          "exclude": [
+            "TC.Micro.Sample.Api/Controllers/**"
+          ]
+        },
+        {
+          "condition": "(!IncludeAdminUi)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/**"
+          ]
+        }
+      ]
+    }
+  ],
+  "specialCustomOperations": {
+    "*.sln": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "actionableIf":     ["#if"],
+            "actionableElse":   ["#else"],
+            "actionableElseif": ["#elseif"],
+            "endif":            ["#endif"],
+            "trim":             true,
+            "wholeLine":        true,
+            "evaluator":        "C++"
+          }
+        }
+      ]
+    }
+  },
+  "guids": [
+    "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA",
+    "BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB",
+    "CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC",
+    "DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD",
+    "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"
+  ],
+  "primaryOutputs": [
+    { "path": "TC.Micro.Sample.sln" }
+  ],
+  "postActions": [
+    {
+      "condition": "(OS != \"Windows_NT\")",
+      "description": "使模板启动脚本可执行",
+      "manualInstructions": [{ "text": "运行 chmod +x *.sh" }],
+      "actionId": "cb9a6cf3-4f5c-4860-b9d2-03a574959774",
+      "continueOnError": true
+    }
+  ]
+}

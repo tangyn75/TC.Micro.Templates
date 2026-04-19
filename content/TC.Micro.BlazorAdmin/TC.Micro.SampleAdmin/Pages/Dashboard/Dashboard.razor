@@ -1,0 +1,151 @@
+@page "/"
+@attribute [Authorize]
+@inject IStringLocalizer<Dashboard> L
+
+<PageTitle>仪表盘 - TC.Micro Admin</PageTitle>
+
+<!-- 页面标题 -->
+<MudText Typo="Typo.h5" Class="mb-6" Style="font-weight:600">仪表盘</MudText>
+
+<!-- 统计卡片（响应式 4/2/1 列布局） -->
+<MudGrid Spacing="3" Class="mb-6">
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="1">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">路由数量</MudText>
+                        <MudText Typo="Typo.h5" Style="font-weight:600">@_stats.RouteCount</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Success">
+                            <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Small" /> 已发布
+                        </MudText>
+                    </MudStack>
+                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.AltRoute" />
+                    </MudAvatar>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="1">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">下游服务</MudText>
+                        <MudText Typo="Typo.h5" Style="font-weight:600">@_stats.ServiceCount</MudText>
+                        <MudText Typo="Typo.caption" Color="Color.Success">健康实例</MudText>
+                    </MudStack>
+                    <MudAvatar Color="Color.Secondary" Variant="Variant.Filled" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.Dns" />
+                    </MudAvatar>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="1">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">注册用户</MudText>
+                        <MudText Typo="Typo.h5" Style="font-weight:600">@_stats.UserCount</MudText>
+                        <MudText Typo="Typo.caption">活跃租户 @_stats.TenantCount</MudText>
+                    </MudStack>
+                    <MudAvatar Color="Color.Tertiary" Variant="Variant.Filled" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.People" />
+                    </MudAvatar>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudCard Elevation="1">
+            <MudCardContent>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">ABAC 策略</MudText>
+                        <MudText Typo="Typo.h5" Style="font-weight:600">@_stats.PolicyCount</MudText>
+                        <MudText Typo="Typo.caption">启用中</MudText>
+                    </MudStack>
+                    <MudAvatar Color="Color.Info" Variant="Variant.Filled" Size="Size.Large">
+                        <MudIcon Icon="@Icons.Material.Filled.Policy" />
+                    </MudAvatar>
+                </MudStack>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+<!-- 快捷操作 -->
+<MudGrid Spacing="3">
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="1">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Gateway 管理</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-3">
+                    管理 YARP 网关的服务注册、路由配置、插件管道和发布流程。
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="/gateway/services" Variant="Variant.Text" Color="Color.Primary">服务列表</MudButton>
+                <MudButton Href="/gateway/routes"   Variant="Variant.Text" Color="Color.Primary">路由配置</MudButton>
+                <MudButton Href="/gateway/plugins"  Variant="Variant.Text" Color="Color.Primary">插件管理</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="1">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Identity 管理</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-3">
+                    管理用户、角色、租户、ABAC 策略和 Service Account。
+                </MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="/identity/users"    Variant="Variant.Text" Color="Color.Secondary">用户管理</MudButton>
+                <MudButton Href="/identity/roles"    Variant="Variant.Text" Color="Color.Secondary">角色权限</MudButton>
+                <MudButton Href="/identity/policies" Variant="Variant.Text" Color="Color.Secondary">ABAC 策略</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private DashboardStats _stats = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: 从 Gateway / Identity 管理 API 拉取汇总数据
+        await Task.CompletedTask;
+        _stats = new DashboardStats
+        {
+            RouteCount  = 0,
+            ServiceCount = 0,
+            UserCount   = 0,
+            TenantCount = 0,
+            PolicyCount = 0
+        };
+    }
+
+    private record DashboardStats
+    {
+        public int RouteCount   { get; init; }
+        public int ServiceCount { get; init; }
+        public int UserCount    { get; init; }
+        public int TenantCount  { get; init; }
+        public int PolicyCount  { get; init; }
+    }
+}

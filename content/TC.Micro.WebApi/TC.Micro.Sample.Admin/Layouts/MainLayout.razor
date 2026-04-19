@@ -1,0 +1,52 @@
+@inherits LayoutComponentBase
+@inject IThemeService ThemeService
+@implements IDisposable
+
+<MudThemeProvider Theme="@ThemeService.CurrentTheme"
+                  IsDarkMode="@ThemeService.IsDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <AppBar OnMenuToggle="@ToggleDrawer" />
+
+    <MudDrawer @bind-Open="_drawerOpen"
+               Variant="DrawerVariant.Responsive"
+               ClipMode="DrawerClipMode.Always"
+               Elevation="2"
+               Width="240px">
+        <NavDrawer />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4 pa-md-6">
+            <ErrorBoundary @ref="_errorBoundary">
+                <ChildContent>@Body</ChildContent>
+                <ErrorContent Context="ex">
+                    <CascadingValue Value="ex">
+                        <Pages.Errors.ServerError />
+                    </CascadingValue>
+                </ErrorContent>
+            </ErrorBoundary>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private ErrorBoundary? _errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        _errorBoundary?.Recover();
+    }
+
+    protected override void OnInitialized() =>
+        ThemeService.OnThemeChanged += StateHasChanged;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    public void Dispose() =>
+        ThemeService.OnThemeChanged -= StateHasChanged;
+}

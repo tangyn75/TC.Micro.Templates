@@ -1,0 +1,51 @@
+@inject NavigationManager Nav
+@inject INavMenuService NavMenuService
+
+<MudNavMenu Dense="false" Rounded="true" Class="pa-2">
+
+    @foreach (var item in _topLevelItems)
+    {
+        <MudNavLink Href="@item.Href"
+                    Icon="@item.Icon"
+                    Match="@(item.Href == "/" ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+            @item.Title
+            @if (item.Badge is not null)
+            {
+                <MudBadge Content="@item.Badge" Color="Color.Error" Class="ml-2" />
+            }
+        </MudNavLink>
+    }
+
+    @foreach (var group in _groups)
+    {
+        <MudNavGroup Title="@group.Title"
+                     Icon="@group.Icon"
+                     Expanded="false">
+            @foreach (var item in group.Items)
+            {
+                <MudNavLink Href="@item.Href"
+                            Icon="@item.Icon"
+                            Match="NavLinkMatch.Prefix">
+                    @item.Title
+                    @if (item.Badge is not null)
+                    {
+                        <MudBadge Content="@item.Badge" Color="Color.Error" Class="ml-2" />
+                    }
+                </MudNavLink>
+            }
+        </MudNavGroup>
+    }
+
+</MudNavMenu>
+
+@code {
+    private IReadOnlyList<NavMenuItem>  _topLevelItems = [];
+    private IReadOnlyList<NavMenuGroup> _groups        = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _topLevelItems = NavMenuService.GetTopLevelItems();
+        _groups        = await NavMenuService.GetGroupsAsync();
+    }
+}
+

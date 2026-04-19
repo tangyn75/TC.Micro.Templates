@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "TC.Micro Team",
+  "classifications": ["Web", "Blazor", "Admin", "UI", "TC.Micro"],
+  "identity": "TCMicro.BlazorAdmin.CSharp.1.0",
+  "name": "TC.Micro Blazor Admin UI",
+  "shortName": "tcmicro-blazoradmin",
+  "description": "独立 Blazor Server 管理后台脚手架，遵循 MudBlazor 企业级设计规范：明/暗主题、多语言 i18n、响应式布局、JWT 认证。",
+  "sourceName": "TC.Micro.SampleAdmin",
+  "preferNameDirectory": false,
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "symbols": {
+    "AdminPort": {
+      "type": "parameter",
+      "datatype": "integer",
+      "defaultValue": "6100",
+      "description": "管理后台 HTTP 监听端口"
+    },
+    "GatewayManagementUrl": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "http://localhost:5101/api",
+      "description": "Gateway 管理 REST API 地址（TC.Micro.Gateway.Admin 的 5101 端口）"
+    },
+    "IdentityManagementUrl": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "http://localhost:5202/api",
+      "description": "Identity 管理 REST API 地址（TC.Micro.Identity.Admin 的 5202 端口）"
+    },
+    "Framework": {
+      "type": "parameter",
+      "description": "目标框架",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "net8.0", "description": ".NET 8 (LTS)" },
+        { "choice": "net9.0", "description": ".NET 9" }
+      ],
+      "defaultValue": "net8.0"
+    }
+  },
+  "guids": [
+    "EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE"
+  ],
+  "primaryOutputs": [
+    { "path": "TC.Micro.SampleAdmin/TC.Micro.SampleAdmin.csproj" }
+  ]
+}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TC.Micro.Sample.Application</RootNamespace>
+    <AssemblyName>TC.Micro.Sample.Application</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TC.Micro.Core" Version="1.*" />
+    <PackageReference Include="TC.Micro.Messaging" Version="1.*" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TC.Micro.Sample.Infrastructure\TC.Micro.Sample.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

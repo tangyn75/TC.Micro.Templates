@@ -1,0 +1,101 @@
+/*
+ * TC.Micro Admin — 全局样式
+ * 遵循 MudBlazor 企业级设计规范（§3 设计系统）
+ * 基准：4px 网格，Roboto + Noto Sans SC 字体，Material Design 3 色彩
+ */
+
+/* ── 全局重置 ──────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── 字体回退（中英文混排）──────────────────────────────── */
+body {
+    font-family: 'Roboto', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.875rem;   /* 14px 正文基准 */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── 滚动条美化（桌面端）───────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background-color: rgba(0,0,0,0.35); }
+
+/* ── 暗色模式滚动条 ─────────────────────────────────────── */
+[data-mud-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* ── 应用标题（AppBar 中）──────────────────────────────── */
+.app-title {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* ── 页面过渡动画 ───────────────────────────────────────── */
+.page-enter {
+    animation: fadeIn 0.2s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── 数据表格行悬停 ─────────────────────────────────────── */
+.mud-table-row:hover {
+    cursor: pointer;
+}
+
+/* ── 统计卡片 hover 效果 ────────────────────────────────── */
+.mud-card {
+    transition: box-shadow 0.2s ease;
+}
+.mud-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* ── 面包屑样式收紧 ─────────────────────────────────────── */
+.mud-breadcrumbs {
+    padding: 0 !important;
+    font-size: 0.8125rem;
+}
+
+/* ── 响应式辅助：移动端隐藏文字，只显示图标 ─────────────── */
+@media (max-width: 599px) {
+    .hide-on-mobile { display: none !important; }
+}
+
+/* ── Blazor 错误 UI ─────────────────────────────────────── */
+#blazor-error-ui {
+    display: none;
+    background: #F44336;
+    bottom: 0;
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.2);
+    color: #fff;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

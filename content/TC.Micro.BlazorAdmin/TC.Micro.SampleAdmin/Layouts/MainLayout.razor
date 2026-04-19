@@ -1,0 +1,64 @@
+@inherits LayoutComponentBase
+@inject IThemeService ThemeService
+@inject ILayoutService LayoutService
+@implements IDisposable
+
+<MudThemeProvider Theme="@ThemeService.CurrentTheme"
+                  IsDarkMode="@ThemeService.IsDarkMode" />
+<MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Small" />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <!-- 顶部 AppBar（高度 64px，移动端 56px） -->
+    <AppBar OnMenuToggle="@ToggleDrawer" />
+
+    <!-- 侧边导航抽屉（宽度 256px） -->
+    <NavDrawer IsOpen="@_drawerOpen"
+               Variant="@_drawerVariant"
+               OnClose="@(() => _drawerOpen = false)" />
+
+    <!-- 主内容区域 -->
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-4 pa-md-6">
+            <!-- 面包屑导航 -->
+            <BreadcrumbNav Class="mb-4" />
+
+            <!-- 页面路由出口，含错误边界 -->
+            <ErrorBoundary @ref="_errorBoundary">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <CascadingValue Value="ex">
+                        <Pages.Errors.ServerError />
+                    </CascadingValue>
+                </ErrorContent>
+            </ErrorBoundary>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private DrawerVariant _drawerVariant = DrawerVariant.Responsive;
+    private ErrorBoundary? _errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        // 路由切换时重置错误边界，避免旧错误遮蔽新页面
+        _errorBoundary?.Recover();
+    }
+
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+    }
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}

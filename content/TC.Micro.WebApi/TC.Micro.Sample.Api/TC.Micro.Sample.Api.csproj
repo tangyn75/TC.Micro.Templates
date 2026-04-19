@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TC.Micro.Sample.Api</RootNamespace>
+    <AssemblyName>TC.Micro.Sample.Api</AssemblyName>
+    <UserSecretsId>DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- TC.Micro 核心构建块 -->
+    <PackageReference Include="TC.Micro.Core" Version="1.*" />
+    <PackageReference Include="TC.Micro.Consul" Version="1.*" />
+    <PackageReference Include="TC.Micro.Identity.Client" Version="1.*" />
+    <PackageReference Include="TC.Micro.Messaging.RabbitMQ" Version="1.*" />
+    <PackageReference Include="TC.Micro.Dtm" Version="1.*" />
+    <PackageReference Include="TC.Micro.Caching" Version="1.*" />
+    <PackageReference Include="TC.Micro.Logging" Version="1.*" />
+    <PackageReference Include="TC.Micro.Tracing" Version="1.*" />
+    <PackageReference Include="TC.Micro.HealthChecks" Version="1.*" />
+    <!--#if (IsHttp)-->
+    <!-- HTTP 模式：OpenAPI 文档生成 -->
+    <PackageReference Include="TC.Micro.OpenApi" Version="1.*" />
+    <!--#endif-->
+    <!--#if (IsGrpc)-->
+    <!-- gRPC 模式：Grpc.AspNetCore 框架 -->
+    <PackageReference Include="Grpc.AspNetCore" Version="2.*" />
+    <!--#endif-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--#if (IsGrpc)-->
+    <!-- gRPC 模式：编译 .proto 文件，生成服务端代码 -->
+    <Protobuf Include="Protos\sample.proto" GrpcServices="Server" />
+    <!--#endif-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TC.Micro.Sample.Application\TC.Micro.Sample.Application.csproj" />
+    <ProjectReference Include="..\TC.Micro.Sample.Infrastructure\TC.Micro.Sample.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

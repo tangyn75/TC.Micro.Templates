@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TC.Micro.Sample.Infrastructure</RootNamespace>
+    <AssemblyName>TC.Micro.Sample.Infrastructure</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- EF Core + Npgsql（PostgreSQL 16+） -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <!-- TC.Micro 基础包 -->
+    <PackageReference Include="TC.Micro.Core" Version="1.*" />
+    <PackageReference Include="TC.Micro.EntityFrameworkCore" Version="1.*" />
+  </ItemGroup>
+
+</Project>

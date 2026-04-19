@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TC.Micro.SampleAdmin</RootNamespace>
+    <AssemblyName>TC.Micro.SampleAdmin</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MudBlazor 7.x（Material Design 3 企业级 UI） -->
+    <PackageReference Include="MudBlazor" Version="7.*" />
+    <PackageReference Include="MudBlazor.Extensions" Version="7.*" />
+
+    <!-- 多语言国际化 -->
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.*" />
+
+    <!-- HTTP 客户端（调用 Gateway / Identity 管理 API） -->
+    <PackageReference Include="Refit" Version="7.*" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.*" />
+
+    <!-- 表单验证 -->
+    <PackageReference Include="FluentValidation" Version="11.*" />
+
+    <!-- JWT 认证 -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.*" />
+
+    <!-- 结构化日志 -->
+    <PackageReference Include="Serilog.AspNetCore" Version="8.*" />
+
+    <!-- 状态管理（可选，按需启用） -->
+    <!-- <PackageReference Include="Fluxor.Blazor.Web" Version="6.*" /> -->
+  </ItemGroup>
+
+</Project>

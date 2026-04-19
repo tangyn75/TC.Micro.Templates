@@ -1,0 +1,31 @@
+@page "/403"
+
+<PageTitle>403 - 无访问权限</PageTitle>
+
+<MudStack AlignItems="AlignItems.Center" Spacing="4" Class="mt-8">
+
+    <MudText Typo="Typo.h1"
+             Style="font-size:8rem;font-weight:700;line-height:1;opacity:.15">
+        403
+    </MudText>
+
+    <MudIcon Icon="@Icons.Material.Outlined.Lock"
+             Size="Size.Large"
+             Color="Color.Error"
+             Style="font-size:4rem;margin-top:-2rem" />
+
+    <MudText Typo="Typo.h5" Style="font-weight:600">无访问权限</MudText>
+
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center">
+        您没有访问此页面所需的权限，请联系管理员授权后再试。
+    </MudText>
+
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               Size="Size.Large"
+               Href="/"
+               StartIcon="@Icons.Material.Filled.Home">
+        返回首页
+    </MudButton>
+
+</MudStack>

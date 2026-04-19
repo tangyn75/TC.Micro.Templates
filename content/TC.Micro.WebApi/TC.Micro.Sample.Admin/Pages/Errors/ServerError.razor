@@ -1,0 +1,49 @@
+@page "/error"
+@inject IWebHostEnvironment Env
+
+<PageTitle>500 - 服务器错误</PageTitle>
+
+<MudStack AlignItems="AlignItems.Center" Spacing="4" Class="mt-8">
+
+    <MudText Typo="Typo.h1"
+             Style="font-size:8rem;font-weight:700;line-height:1;opacity:.15">
+        500
+    </MudText>
+
+    <MudIcon Icon="@Icons.Material.Outlined.ErrorOutline"
+             Size="Size.Large"
+             Color="Color.Error"
+             Style="font-size:4rem;margin-top:-2rem" />
+
+    <MudText Typo="Typo.h5" Style="font-weight:600">服务器错误</MudText>
+
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center">
+        服务器遇到了意外错误，无法完成您的请求。请稍后再试，或联系管理员。
+    </MudText>
+
+    @if (Env.IsDevelopment() && Exception is not null)
+    {
+        <MudExpansionPanels Class="mt-2" Style="max-width:640px;width:100%">
+            <MudExpansionPanel Text="查看错误详情（开发环境）" IsInitiallyExpanded="false">
+                <MudText Typo="Typo.caption"
+                         Style="white-space:pre-wrap;word-break:break-all;font-family:monospace">
+                    @Exception.ToString()
+                </MudText>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    }
+
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               Size="Size.Large"
+               Href="/"
+               StartIcon="@Icons.Material.Filled.Home">
+        返回首页
+    </MudButton>
+
+</MudStack>
+
+@code {
+    /// <summary>由 MainLayout ErrorBoundary 通过 CascadingParameter 传入</summary>
+    [CascadingParameter] public Exception? Exception { get; set; }
+}

@@ -1,0 +1,87 @@
+@inject NavigationManager Nav
+@inject INavMenuService NavMenuService
+
+<MudDrawer @bind-Open="IsOpen"
+           Variant="@Variant"
+           ClipMode="DrawerClipMode.Always"
+           Elevation="2"
+           Width="256px">
+
+    <!-- 抽屉头部（移动端显示 Logo） -->
+    <MudDrawerHeader>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Class="py-1">
+            <MudIcon Icon="@Icons.Material.Filled.CloudDone"
+                     Size="Size.Medium"
+                     Color="Color.Primary" />
+            <MudText Typo="Typo.h6" Class="ml-1" Style="font-weight:600">TC.Micro</MudText>
+        </MudStack>
+    </MudDrawerHeader>
+
+    <MudDivider />
+
+    <!-- 导航菜单（由 INavMenuService 动态提供，业务方替换实现即可） -->
+    <MudNavMenu Dense="false" Rounded="true" Class="pa-2">
+
+        <!-- 顶级直接链接 -->
+        @foreach (var item in _topLevelItems)
+        {
+            <MudNavLink Href="@item.Href"
+                        Icon="@item.Icon"
+                        Match="@(item.Href == "/" ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                @item.Title
+                @if (item.Badge is not null)
+                {
+                    <MudBadge Content="@item.Badge" Color="Color.Error" Class="ml-2" />
+                }
+            </MudNavLink>
+        }
+
+        <!-- 分组菜单 -->
+        @foreach (var group in _groups)
+        {
+            <MudNavGroup Title="@group.Title"
+                         Icon="@group.Icon"
+                         Expanded="false">
+                @foreach (var item in group.Items)
+                {
+                    <MudNavLink Href="@item.Href"
+                                Icon="@item.Icon"
+                                Match="NavLinkMatch.Prefix">
+                        @item.Title
+                        @if (item.Badge is not null)
+                        {
+                            <MudBadge Content="@item.Badge" Color="Color.Error" Class="ml-2" />
+                        }
+                    </MudNavLink>
+                }
+            </MudNavGroup>
+        }
+
+    </MudNavMenu>
+
+    <MudSpacer />
+
+    <MudDivider />
+
+    <!-- 抽屉底部：版本信息 -->
+    <MudStack Class="pa-3">
+        <MudText Typo="Typo.caption" Color="Color.Secondary">TC.Micro Admin v1.0.0</MudText>
+    </MudStack>
+
+</MudDrawer>
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter] public DrawerVariant Variant { get; set; } = DrawerVariant.Responsive;
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private IReadOnlyList<NavMenuItem>  _topLevelItems = [];
+    private IReadOnlyList<NavMenuGroup> _groups        = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _topLevelItems = NavMenuService.GetTopLevelItems();
+        _groups        = await NavMenuService.GetGroupsAsync();
+    }
+}

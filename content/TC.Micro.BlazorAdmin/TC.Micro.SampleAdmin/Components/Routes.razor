@@ -1,0 +1,26 @@
+<Router AppAssembly="typeof(App).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layouts.MainLayout)">
+            <NotAuthorized>
+                @if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    <!-- 已登录但无权限 → 403 -->
+                    <LayoutView Layout="typeof(Layouts.AuthLayout)">
+                        <Pages.Errors.AccessDenied />
+                    </LayoutView>
+                }
+                else
+                {
+                    <!-- 未登录 → 跳转登录页 -->
+                    <RedirectToLogin />
+                }
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="typeof(Layouts.AuthLayout)">
+            <Pages.Errors.NotFound />
+        </LayoutView>
+    </NotFound>
+</Router>

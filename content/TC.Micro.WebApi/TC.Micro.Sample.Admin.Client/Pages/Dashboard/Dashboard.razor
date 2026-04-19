@@ -1,0 +1,105 @@
+@page "/"
+@inject IHttpClientFactory HttpFactory
+
+<PageTitle>服务概览 - Sample Admin</PageTitle>
+
+<MudText Typo="Typo.h5" Class="mb-6" Style="font-weight:600">服务概览</MudText>
+
+<!-- 服务信息卡 -->
+<MudGrid Spacing="3" Class="mb-6">
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="1">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">服务信息</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Refresh"
+                                   OnClick="@LoadInfo" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                @if (_loading)
+                {
+                    <MudProgressLinear Indeterminate="true" />
+                }
+                else if (_info is null)
+                {
+                    <MudAlert Severity="Severity.Warning" Dense="true">
+                        无法连接到 Sample Api（检查 SampleApiBaseUrl 配置）
+                    </MudAlert>
+                }
+                else
+                {
+                    <MudList Dense="true">
+                        <MudListItem Icon="@Icons.Material.Outlined.Label">
+                            <MudText><b>名称：</b>@_info.ServiceName</MudText>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Outlined.Tag">
+                            <MudText><b>版本：</b>@_info.Version</MudText>
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Outlined.AccessTime">
+                            <MudText><b>启动时间：</b>@_info.StartedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</MudText>
+                        </MudListItem>
+                    </MudList>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+
+    <MudItem xs="12" md="6">
+        <MudCard Elevation="1">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">管理端点</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Dense="true">
+                    <MudListItem Icon="@Icons.Material.Outlined.Api">
+                        <MudText Typo="Typo.body2">
+                            <code>GET /api/management/info</code> — 服务信息
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Outlined.Api">
+                        <MudText Typo="Typo.body2">
+                            <code>GET /api/management/stats</code> — 运行统计
+                        </MudText>
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Outlined.Favorite">
+                        <MudText Typo="Typo.body2">
+                            <code>GET /health/ready</code> — 就绪检查
+                        </MudText>
+                    </MudListItem>
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool _loading;
+    private ServiceInfoDto? _info;
+
+    protected override async Task OnInitializedAsync() => await LoadInfo();
+
+    private async Task LoadInfo()
+    {
+        _loading = true;
+        try
+        {
+            var client = HttpFactory.CreateClient("SampleApi");
+            _info = await client.GetFromJsonAsync<ServiceInfoDto>("/api/management/info");
+        }
+        catch
+        {
+            _info = null;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private record ServiceInfoDto(string ServiceName, string Version, DateTimeOffset StartedAt);
+}

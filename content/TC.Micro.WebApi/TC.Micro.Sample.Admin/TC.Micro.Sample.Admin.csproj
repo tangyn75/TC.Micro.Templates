@@ -1,4 +1,9 @@
+<!--#if (IsAdminWasm)-->
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<!--#endif-->
+<!--#if (IsAdminServer || IsAdminAuto)-->
 <Project Sdk="Microsoft.NET.Sdk.Web">
+<!--#endif-->
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,24 +11,28 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>TC.Micro.Sample.Admin</RootNamespace>
     <AssemblyName>TC.Micro.Sample.Admin</AssemblyName>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- MudBlazor UI 库（遵循 TC.Micro MudBlazor 设计规范） -->
+    <!-- MudBlazor 8.x -->
     <PackageReference Include="MudBlazor" Version="8.*" />
-    <!-- TC.Micro 基础日志 -->
+<!--#if (IsAdminServer || IsAdminAuto)-->
     <PackageReference Include="TC.Micro.Logging" Version="1.*" />
     <PackageReference Include="TC.Micro.HealthChecks" Version="1.*" />
+<!--#endif-->
+<!--#if (IsAdminWasm)-->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.*" />
+<!--#endif-->
   </ItemGroup>
 
   <ItemGroup>
-    <!--
-      Admin 直接引用 Application 层（可访问业务服务 / 仓储），
-      不引用 Infrastructure（由 Api 主进程负责数据访问）。
-      如需读取统计数据，通过 IHttpClientFactory 调用 Api 层内部接口。
-    -->
     <ProjectReference Include="..\TC.Micro.Sample.Application\TC.Micro.Sample.Application.csproj" />
   </ItemGroup>
+
+<!--#if (IsAdminAuto)-->
+  <ItemGroup>
+    <ProjectReference Include="..\TC.Micro.Sample.Admin.Client\TC.Micro.Sample.Admin.Client.csproj" />
+  </ItemGroup>
+<!--#endif-->
 
 </Project>

@@ -48,7 +48,30 @@
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "是否生成内置管理 UI 项目（第 4 个项目：管理 REST API + Blazor Server UI，独立端口，使用 --IncludeAdminUi 启用）"
+      "description": "是否生成内置管理 UI 项目（第 4 个项目：管理 REST API + Blazor UI，独立端口，使用 --IncludeAdminUi 启用）"
+    },
+    "AdminHostingModel": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        { "choice": "server", "description": "Blazor Server（默认）" },
+        { "choice": "wasm",   "description": "Blazor WebAssembly（独立 SPA）" },
+        { "choice": "auto",   "description": "Blazor Auto（SSR + WASM 交互，双项目）" }
+      ],
+      "defaultValue": "server",
+      "description": "Admin 托管模式（仅 --IncludeAdminUi 时生效）：server | wasm | auto"
+    },
+    "IsAdminServer": {
+      "type": "computed",
+      "value": "(IncludeAdminUi && AdminHostingModel == \"server\")"
+    },
+    "IsAdminWasm": {
+      "type": "computed",
+      "value": "(IncludeAdminUi && AdminHostingModel == \"wasm\")"
+    },
+    "IsAdminAuto": {
+      "type": "computed",
+      "value": "(IncludeAdminUi && AdminHostingModel == \"auto\")"
     },
     "Framework": {
       "type": "parameter",
@@ -82,11 +105,73 @@
           "exclude": [
             "TC.Micro.Sample.Admin/**"
           ]
+        },
+        {
+          "condition": "(!IsAdminAuto)",
+          "exclude": [
+            "TC.Micro.Sample.Admin.Client/**"
+          ]
+        },
+        {
+          "condition": "(IsAdminAuto)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/Layouts/**",
+            "TC.Micro.Sample.Admin/Pages/**",
+            "TC.Micro.Sample.Admin/Shared/**"
+          ]
+        },
+        {
+          "condition": "(IsAdminServer)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/wwwroot/index.html",
+            "TC.Micro.Sample.Admin/Components/App.Wasm.razor",
+            "TC.Micro.Sample.Admin/Components/App.Auto.razor"
+          ],
+          "rename": {
+            "TC.Micro.Sample.Admin/Components/App.Server.razor": "TC.Micro.Sample.Admin/Components/App.razor"
+          }
+        },
+        {
+          "condition": "(IsAdminWasm)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/Controllers/**",
+            "TC.Micro.Sample.Admin/Components/App.Server.razor",
+            "TC.Micro.Sample.Admin/Components/App.Auto.razor"
+          ],
+          "rename": {
+            "TC.Micro.Sample.Admin/Components/App.Wasm.razor": "TC.Micro.Sample.Admin/Components/App.razor"
+          }
+        },
+        {
+          "condition": "(IsAdminAuto)",
+          "exclude": [
+            "TC.Micro.Sample.Admin/Components/App.Server.razor",
+            "TC.Micro.Sample.Admin/Components/App.Wasm.razor"
+          ],
+          "rename": {
+            "TC.Micro.Sample.Admin/Components/App.Auto.razor": "TC.Micro.Sample.Admin/Components/App.razor"
+          }
         }
       ]
     }
   ],
   "specialCustomOperations": {
+    "*.csproj": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "actionableIf":     ["<!--#if"],
+            "actionableElse":   ["<!--#else"],
+            "actionableElseif": ["<!--#elseif"],
+            "endif":            ["<!--#endif"],
+            "trim":             true,
+            "wholeLine":        true,
+            "evaluator":        "C++"
+          }
+        }
+      ]
+    },
     "*.sln": {
       "operations": [
         {

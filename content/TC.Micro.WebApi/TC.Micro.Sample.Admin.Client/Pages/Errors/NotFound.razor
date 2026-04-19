@@ -1,0 +1,31 @@
+@page "/404"
+
+<PageTitle>404 - 页面不存在</PageTitle>
+
+<MudStack AlignItems="AlignItems.Center" Spacing="4" Class="mt-8">
+
+    <MudText Typo="Typo.h1"
+             Style="font-size:8rem;font-weight:700;line-height:1;opacity:.15">
+        404
+    </MudText>
+
+    <MudIcon Icon="@Icons.Material.Outlined.SearchOff"
+             Size="Size.Large"
+             Color="Color.Warning"
+             Style="font-size:4rem;margin-top:-2rem" />
+
+    <MudText Typo="Typo.h5" Style="font-weight:600">页面不存在</MudText>
+
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Align="Align.Center">
+        您访问的页面可能已被移除、改名，或暂时不可用。
+    </MudText>
+
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               Size="Size.Large"
+               Href="/"
+               StartIcon="@Icons.Material.Filled.Home">
+        返回首页
+    </MudButton>
+
+</MudStack>

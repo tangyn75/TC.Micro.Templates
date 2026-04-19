@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <!-- MudBlazor UI 库（遵循 TC.Micro MudBlazor 设计规范） -->
-    <PackageReference Include="MudBlazor" Version="7.*" />
+    <PackageReference Include="MudBlazor" Version="8.*" />
     <!-- TC.Micro 基础日志 -->
     <PackageReference Include="TC.Micro.Logging" Version="1.*" />
     <PackageReference Include="TC.Micro.HealthChecks" Version="1.*" />

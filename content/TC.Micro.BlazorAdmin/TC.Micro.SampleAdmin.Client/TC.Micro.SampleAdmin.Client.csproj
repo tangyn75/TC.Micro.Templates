@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- MudBlazor 7.x -->
-    <PackageReference Include="MudBlazor" Version="7.*" />
-    <PackageReference Include="MudBlazor.Extensions" Version="7.*" />
+    <!-- MudBlazor 8.x -->
+    <PackageReference Include="MudBlazor" Version="8.*" />
+    <PackageReference Include="MudBlazor.Extensions" Version="8.*" />
 
     <!-- 多语言国际化 -->
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.*" />

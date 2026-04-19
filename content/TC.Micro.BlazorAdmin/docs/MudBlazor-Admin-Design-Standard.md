@@ -1,7 +1,7 @@
 # MudBlazor 企业级管理后台设计标准文档
 
 > **版本**: v1.0.0  
-> **基于**: MudBlazor 7.x · Material Design 3 · .NET 8 Blazor  
+> **基于**: MudBlazor 8.x · Material Design 3 · .NET 8 Blazor  
 > **模式**: SPA（单页应用）· 非多 Tab  
 > **参考风格**: Ant Design Pro · Material Design 规范  
 
@@ -47,7 +47,7 @@
 ✅ 明暗主题切换（含系统跟随）
 ✅ 多语言支持（i18n，运行时切换）
 ✅ Blazor Server & WebAssembly 双模式
-✅ 基于 MudBlazor 7.x + Material Design 3
+✅ 基于 MudBlazor 8.x + Material Design 3
 ✅ JWT 认证 + 角色权限控制
 ✅ 动态菜单（后端驱动）
 ```
@@ -70,7 +70,7 @@
 
 ```
 框架层:     .NET 8 + Blazor (Server / WebAssembly)
-UI 库:      MudBlazor 7.x
+UI 库:      MudBlazor 8.x
 CSS:         MudBlazor 主题系统 + CSS 变量
 状态管理:   Fluxor 或 CascadingValue / StateContainer
 国际化:     Microsoft.Extensions.Localization
@@ -101,10 +101,10 @@ HTTP:        HttpClient + Refit / RestSharp
 
 ```xml
 <!-- 核心 UI -->
-<PackageReference Include="MudBlazor" Version="7.*" />
+<PackageReference Include="MudBlazor" Version="8.*" />
 
 <!-- 图标 -->
-<PackageReference Include="MudBlazor.Extensions" Version="7.*" />
+<PackageReference Include="MudBlazor.Extensions" Version="8.*" />
 
 <!-- 多语言 -->
 <PackageReference Include="Microsoft.Extensions.Localization" Version="8.*" />
@@ -2695,7 +2695,7 @@ private async Task ExportToExcel()
 
 | 版本 | 日期 | 变更说明 |
 |------|------|---------|
-| v1.0.0 | 2025-01 | 初始版本，基于 MudBlazor 7.x + .NET 8 |
+| v1.0.0 | 2025-01 | 初始版本，基于 MudBlazor 8.x + .NET 8 |
 
 ---
 
